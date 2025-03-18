@@ -8,7 +8,8 @@ pub struct AppWindow {
     width: usize,
     height: usize,
     scene: Scene,
-    frame_counter: FrameCounter
+    frame_counter: FrameCounter,
+    buffer: Vec<u32>
 }
 
 impl AppWindow {
@@ -17,12 +18,12 @@ impl AppWindow {
             width: config::WINDOW_WIDTH,
             height: config::WINDOW_HEIGHT,
             scene: Scene::new(),
-            frame_counter: FrameCounter::new()
+            frame_counter: FrameCounter::new(),
+            buffer: vec![0u32; config::WINDOW_WIDTH * config::WINDOW_HEIGHT]
         }
     }
-    pub fn display(&mut self) {
-        let buffer = vec![0u32; self.width * self.height];
 
+    pub fn display(&mut self) {
         let mut window = match Window::new("Test", self.width, self.height, WindowOptions::default()) {
             Ok(win) => win,
             Err(err) => {
@@ -35,12 +36,18 @@ impl AppWindow {
 
         while window.is_open() {
             self.update();
-            window.update_with_buffer(&buffer, self.width, self.height).unwrap();
+            self.draw();
+            window.update_with_buffer(&self.buffer, self.width, self.height).unwrap();
         }
 
     }
 
+    fn draw(&mut self) {
+        self.scene.draw(&mut self.buffer);
+    }
+
     fn update(&mut self) {
+        self.scene.update();
         self.frame_counter.update();
     }
 }
