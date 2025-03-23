@@ -1,6 +1,6 @@
 use minifb::{Window, WindowOptions};
 
-use crate::utils::{config, frame_counter::FrameCounter};
+use crate::utils::config;
 
 use super::scene::Scene;
 
@@ -8,7 +8,6 @@ pub struct AppWindow {
     width: usize,
     height: usize,
     scene: Scene,
-    frame_counter: FrameCounter,
     buffer: Vec<u32>
 }
 
@@ -18,7 +17,6 @@ impl AppWindow {
             width: config::WINDOW_WIDTH,
             height: config::WINDOW_HEIGHT,
             scene: Scene::new(),
-            frame_counter: FrameCounter::new(),
             buffer: vec![0u32; config::WINDOW_WIDTH * config::WINDOW_HEIGHT]
         }
     }
@@ -48,7 +46,6 @@ impl AppWindow {
 
     fn update(&mut self) {
         self.scene.update();
-        self.frame_counter.update();
     }
 }
 
