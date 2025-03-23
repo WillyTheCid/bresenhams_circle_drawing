@@ -16,7 +16,10 @@ impl Scene {
     }
 
     pub fn draw(&self, buffer: &mut Vec<u32>) {
-    
+        for pixel in buffer.iter_mut() {
+            *pixel = config::BACKGROUND_COLOR;
+        }
+
         self.circle.draw(buffer);
     }
 }
